@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
@@ -8,6 +9,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
 repositories {
@@ -16,9 +18,20 @@ repositories {
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+
+    compile group: 'org.liquibase', name: 'liquibase-core'
+
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
+    compile group: 'com.zaxxer', name: 'HikariCP'
+
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.0'
+}
+
+bootRun {
+    systemProperties = System.properties
 }
