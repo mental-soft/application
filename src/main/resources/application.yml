@@ -1,6 +1,10 @@
 liquibase:
   change-log: classpath:/db/db.changelog.xml
 
+server:
+  port: 8080
+  contextPath: /application
+
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
