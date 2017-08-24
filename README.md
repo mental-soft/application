@@ -4,10 +4,10 @@
  - Postgresql
 
 ### Run postgresql with docker
- docker run --name postgresql -itd -p 5432:5432 --restart always --env 'DB_NAME=authentication-dev,authentication-qa' --env 'DB_USER=dbuser' --env 'DB_PASS=12345' sameersbn/postgresql
+ docker run --name postgresql -itd -p 5432:5432 --restart always --env 'DB_NAME=application-dev,application-qa' --env 'DB_USER=dbuser' --env 'DB_PASS=12345' sameersbn/postgresql
  
  >Note: Locale makinenizi hem developer hem de qa makinesi olarak düşünebilirsiniz.
- Qa makineniz varsa authentication-qa databasei oluşturmanıza gerek yok.
+ Qa makineniz varsa application-qa databasei oluşturmanıza gerek yok.
  
 #### Environment
  3 tane environmentimiz vardır. 
@@ -36,11 +36,11 @@
  
 #### Java üzerinden run etmek için
  
- <code>java -jar build/libs/authentication.jar</code>
+ <code>java -jar build/libs/application.jar</code>
  
 ###### Environment
  İstediğiniz environment için komutun sonuna --spring.profiles.active={profile-name} ekleyin.
  
  Örneğin
  
- <code>java -jar build/libs/authentication.jar --spring.profiles.active=qa</code>
+ <code>java -jar build/libs/application.jar --spring.profiles.active=qa</code>

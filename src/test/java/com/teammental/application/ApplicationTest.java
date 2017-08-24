@@ -1,5 +1,7 @@
 package com.teammental.application;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+/**
+ * Test Sınıfı
+ */
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,6 +23,11 @@ public class ApplicationTest {
 
   @Autowired
   private MockMvc mvc;
+
+  /**
+   * Index sayfası testi.
+   * @throws Exception exception
+   */
 
   @Test
   public void getIndex() throws Exception {
