@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="sefa.aras">
+        <comment>todo</comment>
+        <createTable tableName="APPLICATION">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true" primaryKeyName="PK_APP_ID"/>
+            </column>
+            <column name="KEY" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="NVARCHAR(150)"/>
+            <column name="DESCRIPTION" type="NVARCHAR(300)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="sefa.aras">
+        <comment>todo</comment>
+        <createTable tableName="MENU">
+            <column name="ID" type="NUMBER">
+                <constraints primaryKey="true" primaryKeyName="PK_MENU_ID"/>
+            </column>
+            <column name="PARENT_ID" type="NUMBER">
+                <constraints foreignKeyName="FK_MENU_ID" 
+                             referencedTableName="MENU"
+                             referencedColumnNames="ID"/>
+            </column>
+            <column name="APPLICATION_ID" type="NUMBER">
+                <constraints foreignKeyName="FK_MENU_APP"
+                             referencedTableName="APPLICATION"
+                             referencedColumnNames="ID"/>
+            </column>
+            <column name="RELATIVE_URL" type="VARCHAR(250)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="NVARCHAR(150)"/>
+            <column name="ORDER" type="NUMBER"/>
+            <column name="DESCRIPTION" type="NVARCHAR(300)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="sefa.aras">
+        <comment>Application tablosuna test verisi eklendi.</comment>
+        <insert tableName="APPLICATION">
+            <column name="ID" valueNumeric="1"/>
+            <column name="KEY" value="KEY1"/>
+            <column name="NAME" value="NAME1"/>
+            <column name="DESCRIPTION" value="DESCRIPTION1"/>
+        </insert>
+        <insert tableName="APPLICATION">
+            <column name="ID" valueNumeric="2"/>
+            <column name="KEY" value="KEY2"/>
+            <column name="NAME" value="NAME2"/>
+            <column name="DESCRIPTION" value="DESCRIPTION2"/>
+        </insert>
+        <insert tableName="APPLICATION">
+            <column name="ID" valueNumeric="3"/>
+            <column name="KEY" value="KEY3"/>
+            <column name="NAME" value="NAME3"/>
+            <column name="DESCRIPTION" value="DESCRIPTION3"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="4" author="sefa.aras">
+        <comment>Menü tablosuna test verisi eklendi.</comment>
+        <insert tableName="MENU">
+            <column name="ID" valueNumeric="1"/>
+            <column name="APPLICATION_ID" valueNumeric="1"/>
+            <column name="RELATIVE_URL" value="RELATIVE_URL1"/>
+            <column name="NAME" value="NAME1"/>
+            <column name="ORDER" valueNumeric="1"/>
+            <column name="DESCRIPTION" value="DESCRIPTION1"/>
+        </insert>
+        <insert tableName="MENU">
+            <column name="ID" valueNumeric="2"/>
+            <column name="PARENT_ID" valueNumeric="1"/>
+            <column name="APPLICATION_ID" valueNumeric="2"/>
+            <column name="RELATIVE_URL" value="RELATIVE_URL2"/>
+            <column name="NAME" value="NAME2"/>
+            <column name="ORDER" valueNumeric="1"/>
+            <column name="DESCRIPTION" value="DESCRIPTION2"/>
+        </insert>
+        <insert tableName="MENU">
+            <column name="ID" valueNumeric="1"/>
+            <column name="PARENT_ID" valueNumeric="1"/>
+            <column name="APPLICATION_ID" valueNumeric="3"/>
+            <column name="RELATIVE_URL" value="RELATIVE_URL3"/>
+            <column name="NAME" value="NAME3"/>
+            <column name="ORDER" valueNumeric="2"/>
+            <column name="DESCRIPTION" value="DESCRIPTION3"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
