@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mental-soft/application.svg?branch=master)](https://travis-ci.org/mental-soft/application)
+
 # Mental Application
 
 # Dependency
