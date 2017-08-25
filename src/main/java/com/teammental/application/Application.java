@@ -5,11 +5,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * Config Sınıfı
+ * Config Sınıfı.
  */
 
 @SpringBootApplication
 public class Application extends WebMvcConfigurerAdapter {
+
+  /**
+   * Main metod.
+   * @param args string array
+   */
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);

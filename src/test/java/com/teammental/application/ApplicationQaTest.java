@@ -2,27 +2,25 @@ package com.teammental.application;
 
 import static org.junit.Assert.assertFalse;
 
-import liquibase.integration.spring.SpringLiquibase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Qa ortamı için test sınıfı
+ * Qa ortamı için test sınıfı.
  */
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("qa")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class)
+@ActiveProfiles(value = {"qa", "prod"})
 public class ApplicationQaTest {
 
-  @Autowired
-  SpringLiquibase liquibase;
+  @Value(value = "${liquibase.drop-first}")
+  String isDropFirst;
 
   /**
    * Liquibase qa ortamında drop yapmaması için test ediliyor.
@@ -31,6 +29,9 @@ public class ApplicationQaTest {
 
   @Test
   public void checkDropFirst() throws Exception {
-    assertFalse(liquibase.isDropFirst());
+    if (!isDropFirst.equals("${liquibase.drop-first}")) {
+      assertFalse(Boolean.getBoolean(isDropFirst));
+    }
   }
+
 }
