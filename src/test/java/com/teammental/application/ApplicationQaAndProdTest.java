@@ -11,13 +11,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Qa ortamı için test sınıfı.
+ * Qa ve Prod ortamı için test sınıfı.
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class)
 @ActiveProfiles(value = {"qa", "prod"})
-public class ApplicationQaTest {
+public class ApplicationQaAndProdTest {
 
   @Value(value = "${liquibase.drop-first}")
   String isDropFirst;
