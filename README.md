@@ -72,11 +72,15 @@
   
 ## Build docker
 
- > Imagei değiştirmek isterseniz.
+ > Imageyi değiştirmek isterseniz.
   
  Projeyi gradle ile build ettikten sonra docker imagesini oluşturmak için docker build etmelisiniz.
   
  <code>docker build -t mental/application .</code>
+ 
+ Proje docker üzerinde çalışıyor ise öncelikle containerı durdurmalısınız.
+ 
+ <code>docker rm -f cont_application</code>
   
 # Browse
   

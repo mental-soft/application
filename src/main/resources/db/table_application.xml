@@ -88,7 +88,7 @@
             <column name="DESCRIPTION" value="DESCRIPTION2"/>
         </insert>
         <insert tableName="MENU">
-            <column name="ID" valueNumeric="1"/>
+            <column name="ID" valueNumeric="3"/>
             <column name="PARENT_ID" valueNumeric="1"/>
             <column name="APPLICATION_ID" valueNumeric="3"/>
             <column name="RELATIVE_URL" value="RELATIVE_URL3"/>
