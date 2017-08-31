@@ -9,7 +9,7 @@
 
     <changeSet id="1" author="sefa.aras">
         <comment>todo</comment>
-        <createTable tableName="APPLICATION">
+        <createTable tableName="MENTAL_APPLICATION">
             <column name="ID" type="NUMBER">
                 <constraints primaryKey="true" primaryKeyName="PK_APP_ID"/>
             </column>
@@ -23,18 +23,18 @@
 
     <changeSet id="2" author="sefa.aras">
         <comment>todo</comment>
-        <createTable tableName="MENU">
+        <createTable tableName="MENTAL_MENU">
             <column name="ID" type="NUMBER">
                 <constraints primaryKey="true" primaryKeyName="PK_MENU_ID"/>
             </column>
             <column name="PARENT_ID" type="NUMBER">
                 <constraints foreignKeyName="FK_MENU_ID" 
-                             referencedTableName="MENU"
+                             referencedTableName="MENTAL_MENU"
                              referencedColumnNames="ID"/>
             </column>
             <column name="APPLICATION_ID" type="NUMBER">
                 <constraints foreignKeyName="FK_MENU_APP"
-                             referencedTableName="APPLICATION"
+                             referencedTableName="MENTAL_APPLICATION"
                              referencedColumnNames="ID"/>
             </column>
             <column name="RELATIVE_URL" type="VARCHAR(250)">
@@ -48,19 +48,19 @@
 
     <changeSet id="3" author="sefa.aras">
         <comment>Application tablosuna test verisi eklendi.</comment>
-        <insert tableName="APPLICATION">
+        <insert tableName="MENTAL_APPLICATION">
             <column name="ID" valueNumeric="1"/>
             <column name="KEY" value="KEY1"/>
             <column name="NAME" value="NAME1"/>
             <column name="DESCRIPTION" value="DESCRIPTION1"/>
         </insert>
-        <insert tableName="APPLICATION">
+        <insert tableName="MENTAL_APPLICATION">
             <column name="ID" valueNumeric="2"/>
             <column name="KEY" value="KEY2"/>
             <column name="NAME" value="NAME2"/>
             <column name="DESCRIPTION" value="DESCRIPTION2"/>
         </insert>
-        <insert tableName="APPLICATION">
+        <insert tableName="MENTAL_APPLICATION">
             <column name="ID" valueNumeric="3"/>
             <column name="KEY" value="KEY3"/>
             <column name="NAME" value="NAME3"/>
@@ -70,7 +70,7 @@
 
     <changeSet id="4" author="sefa.aras">
         <comment>Menü tablosuna test verisi eklendi.</comment>
-        <insert tableName="MENU">
+        <insert tableName="MENTAL_MENU">
             <column name="ID" valueNumeric="1"/>
             <column name="APPLICATION_ID" valueNumeric="1"/>
             <column name="RELATIVE_URL" value="RELATIVE_URL1"/>
@@ -78,7 +78,7 @@
             <column name="ORDER" valueNumeric="1"/>
             <column name="DESCRIPTION" value="DESCRIPTION1"/>
         </insert>
-        <insert tableName="MENU">
+        <insert tableName="MENTAL_MENU">
             <column name="ID" valueNumeric="2"/>
             <column name="PARENT_ID" valueNumeric="1"/>
             <column name="APPLICATION_ID" valueNumeric="2"/>
@@ -87,7 +87,7 @@
             <column name="ORDER" valueNumeric="1"/>
             <column name="DESCRIPTION" value="DESCRIPTION2"/>
         </insert>
-        <insert tableName="MENU">
+        <insert tableName="MENTAL_MENU">
             <column name="ID" valueNumeric="3"/>
             <column name="PARENT_ID" valueNumeric="1"/>
             <column name="APPLICATION_ID" valueNumeric="3"/>
