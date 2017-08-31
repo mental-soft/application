@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "APPLICATION")
+@Table(name = "MENTAL_APPLICATION")
 public class Application {
 
   @Id
@@ -19,15 +19,15 @@ public class Application {
   private int id;
 
   @Size(max = 100)
-  @Column(name = "KEY")
+  @Column(name = "KEY", columnDefinition = "VARCHAR")
   private String key;
 
   @Size(max = 150)
-  @Column(name = "NAME")
+  @Column(name = "NAME", columnDefinition = "NVARCHAR")
   private String name;
 
   @Size(max = 300)
-  @Column(name = "DESCRIPTION")
+  @Column(name = "DESCRIPTION", columnDefinition = "NVARCHAR")
   private String description;
 
   public int getId() {

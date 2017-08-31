@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "MENU")
+@Table(name = "MENTAL_MENU")
 public class Menu {
 
   @Id
@@ -25,18 +25,18 @@ public class Menu {
   private int applicationId;
 
   @Size(max = 250)
-  @Column(name = "RELATIVE_URL")
+  @Column(name = "RELATIVE_URL", columnDefinition = "VARCHAR")
   private String relativeUrl;
 
   @Size(max = 150)
-  @Column(name = "NAME")
+  @Column(name = "NAME", columnDefinition = "NVARCHAR")
   private String name;
 
   @Column(name = "ORDER", columnDefinition = "NUMERIC")
   private int order;
 
   @Size(max = 300)
-  @Column(name = "DESCRIPTION")
+  @Column(name = "DESCRIPTION", columnDefinition = "NVARCHAR")
   private String description;
 
   public int getId() {
@@ -94,4 +94,5 @@ public class Menu {
   public void setDescription(String description) {
     this.description = description;
   }
+
 }
