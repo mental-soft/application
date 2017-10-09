@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="3" author="sefa.aras">
+        <comment>Menu tablosu oluşturuldu.</comment>
+        <createTable tableName="mental_menu">
+            <column name="id" type="serial" incrementBy="1" startWith="5" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_app_id"/>
+            </column>
+            <column name="parent_id" type="number">
+                <constraints foreignKeyName="fk_menu_id"
+                             referencedTableName="mental_menu"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="application_id" type="integer">
+                <constraints foreignKeyName="fk_menu_app"
+                             referencedTableName="mental_application"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="relative_url" type="varchar(250)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="name" type="nvarchar(150)"/>
+            <column name="order" type="integer"/>
+            <column name="description" type="nvarchar(300)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="sefa.aras">
+        <comment>Menu tablosuna test verisi eklendi.</comment>
+        <insert tableName="mental_menu">
+            <column name="id" valueNumeric="1"/>
+            <column name="application_id" valueNumeric="1"/>
+            <column name="relative_url" value="RELATIVE_URL1"/>
+            <column name="name" value="NAME1"/>
+            <column name="order" valueNumeric="1"/>
+            <column name="description" value="DESCRIPTION1"/>
+        </insert>
+        <insert tableName="mental_menu">
+            <column name="id" valueNumeric="2"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="application_id" valueNumeric="2"/>
+            <column name="relative_url" value="RELATIVE_URL2"/>
+            <column name="name" value="NAME2"/>
+            <column name="order" valueNumeric="1"/>
+            <column name="description" value="DESCRIPTION2"/>
+        </insert>
+        <insert tableName="mental_menu">
+            <column name="id" valueNumeric="3"/>
+            <column name="parent_id" valueNumeric="1"/>
+            <column name="application_id" valueNumeric="3"/>
+            <column name="relative_url" value="RELATIVE_URL3"/>
+            <column name="name" value="NAME3"/>
+            <column name="order" valueNumeric="2"/>
+            <column name="description" value="DESCRIPTION3"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
