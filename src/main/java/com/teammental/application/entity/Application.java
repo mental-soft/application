@@ -2,7 +2,10 @@ package com.teammental.application.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -11,30 +14,31 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "MENTAL_APPLICATION")
+@Table(name = "mental_application")
 public class Application {
 
   @Id
-  @Column(name = "ID", columnDefinition = "NUMERIC")
-  private int id;
+  @Column(name = "id", columnDefinition = "serial", unique = true, nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
   @Size(max = 100)
-  @Column(name = "KEY", columnDefinition = "VARCHAR")
+  @Column(name = "key", columnDefinition = "varchar")
   private String key;
 
   @Size(max = 150)
-  @Column(name = "NAME", columnDefinition = "NVARCHAR")
+  @Column(name = "name", columnDefinition = "nvarchar")
   private String name;
 
   @Size(max = 300)
-  @Column(name = "DESCRIPTION", columnDefinition = "NVARCHAR")
+  @Column(name = "description", columnDefinition = "nvarchar")
   private String description;
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

@@ -2,6 +2,8 @@ package com.teammental.application.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -11,55 +13,56 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "MENTAL_MENU")
+@Table(name = "mental_menu")
 public class Menu {
 
   @Id
-  @Column(name = "ID", columnDefinition = "NUMERIC")
-  private int id;
+  @Column(name = "id", columnDefinition = "serial", unique = true, nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-  @Column(name = "PARENT_ID", columnDefinition = "NUMERIC")
-  private int parentId;
+  @Column(name = "parent_id", columnDefinition = "integer")
+  private Integer parentId;
 
-  @Column(name = "APPLICATION_ID", columnDefinition = "NUMERIC")
-  private int applicationId;
+  @Column(name = "application_id", columnDefinition = "integer")
+  private Integer applicationId;
 
   @Size(max = 250)
-  @Column(name = "RELATIVE_URL", columnDefinition = "VARCHAR")
+  @Column(name = "relative_url", columnDefinition = "varchar")
   private String relativeUrl;
 
   @Size(max = 150)
-  @Column(name = "NAME", columnDefinition = "NVARCHAR")
+  @Column(name = "name", columnDefinition = "nvarchar")
   private String name;
 
-  @Column(name = "ORDER", columnDefinition = "NUMERIC")
-  private int order;
+  @Column(name = "order", columnDefinition = "integer")
+  private Integer order;
 
   @Size(max = 300)
-  @Column(name = "DESCRIPTION", columnDefinition = "NVARCHAR")
+  @Column(name = "description", columnDefinition = "nvarchar")
   private String description;
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
-  public int getParentId() {
+  public Integer getParentId() {
     return parentId;
   }
 
-  public void setParentId(int parentId) {
+  public void setParentId(Integer parentId) {
     this.parentId = parentId;
   }
 
-  public int getApplicationId() {
+  public Integer getApplicationId() {
     return applicationId;
   }
 
-  public void setApplicationId(int applicationId) {
+  public void setApplicationId(Integer applicationId) {
     this.applicationId = applicationId;
   }
 
@@ -79,11 +82,11 @@ public class Menu {
     this.name = name;
   }
 
-  public int getOrder() {
+  public Integer getOrder() {
     return order;
   }
 
-  public void setOrder(int order) {
+  public void setOrder(Integer order) {
     this.order = order;
   }
 
