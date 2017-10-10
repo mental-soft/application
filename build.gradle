@@ -18,3 +18,7 @@ jar {
 apply from: "https://raw.githubusercontent.com/mental-soft/gradle-config/master/global-config.gradle"
 
 apply from: "https://raw.githubusercontent.com/mental-soft/gradle-config/master/dependencies-api.gradle"
+
+dependencies {
+    compile 'com.teammental:memapper:3.0'
+}
