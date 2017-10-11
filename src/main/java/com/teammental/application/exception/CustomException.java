@@ -4,7 +4,7 @@ package com.teammental.application.exception;
  * Exception'ların yönetildiği sınıftır.
  */
 
-public class CustomException extends RuntimeException {
+public class CustomException extends Exception {
 
   public static final String application_not_found = "Herhangi bir uygulama bulunamadı.";
   public static final String application_key_required = "Anahtar alanı zorunludur.";
