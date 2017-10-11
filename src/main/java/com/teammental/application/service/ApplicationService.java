@@ -2,6 +2,7 @@ package com.teammental.application.service;
 
 import com.teammental.application.dto.ApplicationDto;
 import com.teammental.application.dto.IdNameDto;
+import com.teammental.application.exception.CustomException;
 
 import java.util.List;
 
@@ -11,16 +12,16 @@ import java.util.List;
 
 public interface ApplicationService {
 
-  List<ApplicationDto> getAll() throws Exception;
+  List<ApplicationDto> getAll() throws CustomException;
 
-  List<IdNameDto> getAllIdName() throws Exception;
+  List<IdNameDto> getAllIdName() throws CustomException;
 
-  Integer save(ApplicationDto applicationDto) throws Exception;
+  Integer save(ApplicationDto applicationDto) throws CustomException;
 
-  ApplicationDto getOne(Integer applicationId) throws Exception;
+  ApplicationDto getOne(Integer applicationId) throws CustomException;
 
-  ApplicationDto update(ApplicationDto applicationDto) throws Exception;
+  ApplicationDto update(ApplicationDto applicationDto) throws CustomException;
 
-  void delete(Integer applicationId) throws Exception;
+  void delete(Integer applicationId) throws CustomException;
 
 }
