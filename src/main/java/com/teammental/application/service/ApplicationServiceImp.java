@@ -124,6 +124,22 @@ public class ApplicationServiceImp implements ApplicationService {
    */
   @Override
   public ApplicationDto update(ApplicationDto applicationDto) throws CustomException {
+    if (StringUtils.isEmpty(applicationDto.getKey())) {
+      throw new CustomException(1, CustomException.application_key_required);
+    }
+
+    if (StringUtils.isEmpty(applicationDto.getName())) {
+      throw new CustomException(2, CustomException.application_name_required);
+    }
+
+    if (StringUtils.isEmpty(applicationDto.getDescription())) {
+      throw new CustomException(3, CustomException.application_description_required);
+    }
+
+    if (applicationRepository.findByKey(applicationDto.getKey()) != null) {
+      throw new CustomException(4, CustomException.application_same_key);
+    }
+
     Optional<Application> optional = MeMapper.from(applicationDto)
         .toOptional(Application.class);
 
