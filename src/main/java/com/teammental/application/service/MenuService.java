@@ -15,12 +15,10 @@ public interface MenuService {
 
   List<MenuDto> getByApplicationId(Integer applicationId) throws CustomException;
 
-  Integer save(MenuDto menuDto) throws CustomException;
+  Integer saveOrUpdate(MenuDto menuDto) throws CustomException;
 
-  MenuDto getOne(Integer menuId) throws CustomException;
+  MenuDto getOne(Integer id) throws CustomException;
 
-  MenuDto update(MenuDto menuDto) throws CustomException;
-
-  void delete(Integer menuId) throws CustomException;
+  void delete(Integer id) throws CustomException;
 
 }

@@ -16,12 +16,10 @@ public interface ApplicationService {
 
   List<IdNameDto> getAllIdName() throws CustomException;
 
-  Integer save(ApplicationDto applicationDto) throws CustomException;
+  Integer saveOrUpdate(ApplicationDto applicationDto) throws CustomException;
 
-  ApplicationDto getOne(Integer applicationId) throws CustomException;
+  ApplicationDto getOne(Integer id) throws CustomException;
 
-  ApplicationDto update(ApplicationDto applicationDto) throws CustomException;
-
-  void delete(Integer applicationId) throws CustomException;
+  void delete(Integer id) throws CustomException;
 
 }

@@ -1,5 +1,7 @@
 package com.teammental.application.exception;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * Exception'ların yönetildiği sınıftır.
  */
@@ -24,19 +26,19 @@ public class CustomException extends Exception {
   public static final String menu_same_url = "Bu link ile bir işlem zaten var.";
   public static final String menu_save_error = "Kaydetme işlemi sırasında bir hata oluştu.";
 
-  private int code;
+  private HttpStatus code;
   private String label;
 
-  public CustomException(int code, String label) {
+  public CustomException(HttpStatus code, String label) {
     this.code = code;
     this.label = label;
   }
 
-  public int getCode() {
+  public HttpStatus getCode() {
     return code;
   }
 
-  public void setCode(int code) {
+  public void setCode(HttpStatus code) {
     this.code = code;
   }
 
