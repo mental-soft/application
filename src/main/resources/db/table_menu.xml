@@ -11,9 +11,9 @@
         <comment>Menu tablosu oluşturuldu.</comment>
         <createTable tableName="mental_menu">
             <column name="id" type="serial" incrementBy="1" startWith="5" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_app_id"/>
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_menu_id"/>
             </column>
-            <column name="parent_id" type="number">
+            <column name="parent_id" type="integer">
                 <constraints foreignKeyName="fk_menu_id"
                              referencedTableName="mental_menu"
                              referencedColumnNames="id"/>
