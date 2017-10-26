@@ -58,7 +58,7 @@
  
  >Docker run ile çalıştırırken dependent olan containerları ayağa kaldırmalısınız.
  
- <code>docker run -it --name cont_application -p 8080:10040 --link cont_postgresql mental/application</code>
+ <code>docker run -it --name cont_application -p 10040:10040 --link cont_postgresql mental/application</code>
   
 # Docker compose dan çalıştırma
  
