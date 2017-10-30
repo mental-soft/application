@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "mental_menu")
+@Table(name = "menu")
 public class Menu {
 
   @Id
@@ -24,18 +24,18 @@ public class Menu {
   @Column(name = "parent_id", columnDefinition = "integer")
   private Integer parentId;
 
-  @Column(name = "application_id", columnDefinition = "integer")
+  @Column(name = "application_id", columnDefinition = "integer", nullable = false)
   private Integer applicationId;
 
   @Size(max = 250)
-  @Column(name = "relative_url", columnDefinition = "varchar")
+  @Column(name = "relative_url", columnDefinition = "varchar", unique = true, nullable = false)
   private String relativeUrl;
 
   @Size(max = 150)
-  @Column(name = "name", columnDefinition = "nvarchar")
+  @Column(name = "name", columnDefinition = "nvarchar", nullable = false)
   private String name;
 
-  @Column(name = "order", columnDefinition = "integer")
+  @Column(name = "order", columnDefinition = "integer", nullable = false)
   private Integer order;
 
   @Size(max = 300)

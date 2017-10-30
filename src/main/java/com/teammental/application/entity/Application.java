@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "mental_application")
+@Table(name = "application")
 public class Application {
 
   @Id
@@ -22,11 +22,11 @@ public class Application {
   private Integer id;
 
   @Size(max = 100)
-  @Column(name = "key", columnDefinition = "varchar")
+  @Column(name = "key", columnDefinition = "varchar", unique = true, nullable = false)
   private String key;
 
   @Size(max = 150)
-  @Column(name = "name", columnDefinition = "nvarchar")
+  @Column(name = "name", columnDefinition = "nvarchar", nullable = false)
   private String name;
 
   @Size(max = 300)

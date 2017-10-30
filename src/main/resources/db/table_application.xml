@@ -1,41 +1,42 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
-    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="1" author="sefa.aras">
         <comment>Application tablosu oluşturuldu.</comment>
-        <createTable tableName="mental_application">
+        <createTable tableName="application">
             <column name="id" type="serial" incrementBy="1" startWith="5" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_app_id"/>
             </column>
             <column name="key" type="varchar(100)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="name" type="nvarchar(150)"/>
+            <column name="name" type="nvarchar(150)">
+                <constraints nullable="false"/>
+            </column>
             <column name="description" type="nvarchar(300)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="2" author="sefa.aras">
         <comment>Application tablosuna test verisi eklendi.</comment>
-        <insert tableName="mental_application">
+        <insert tableName="application">
             <column name="id" valueNumeric="1"/>
             <column name="key" value="KEY1"/>
             <column name="name" value="NAME1"/>
             <column name="description" value="DESCRIPTION1"/>
         </insert>
-        <insert tableName="mental_application">
+        <insert tableName="application">
             <column name="id" valueNumeric="2"/>
             <column name="key" value="KEY2"/>
             <column name="name" value="NAME2"/>
             <column name="description" value="DESCRIPTION2"/>
         </insert>
-        <insert tableName="mental_application">
+        <insert tableName="application">
             <column name="id" valueNumeric="3"/>
             <column name="key" value="KEY3"/>
             <column name="name" value="NAME3"/>
