@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class ApplicationQaAndProdTest {
 
   @Value(value = "${liquibase.drop-first}")
-  String isDropFirst;
+  private String isDropFirst;
 
   /**
    * Liquibase qa ortamında drop yapmaması için test ediliyor.

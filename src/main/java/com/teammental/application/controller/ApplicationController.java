@@ -25,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ApplicationController {
 
-  private static final String MAP_APPLICATION = "/applications";
+  public static final String MAP_APPLICATION = "/applications";
+  public static final String MAP_APPLICATION_IDNAME = "/applications/idname";
+  public static final String MAP_APPLICATION_DETAIL = "/applications/{id}";
   private static final String MAP_APPLICATION_JSON = "application/json";
-  private static final String MAP_APPLICATION_IDNAME = "/applications/idname";
-  private static final String MAP_APPLICATION_DETAIL = "/applications/{id}";
 
   @Autowired
   private ApplicationService applicationService;
@@ -40,7 +40,7 @@ public class ApplicationController {
   @GetMapping(value = MAP_APPLICATION, produces = MAP_APPLICATION_JSON)
   public ResponseEntity getApplications() {
     try {
-      List<ApplicationDto> list = applicationService.getAll();
+      List<ApplicationDto> list = applicationService.findAll();
 
       return ResponseEntity.ok().body(list);
 
@@ -56,7 +56,7 @@ public class ApplicationController {
   @GetMapping(value = MAP_APPLICATION_IDNAME, produces = MAP_APPLICATION_JSON)
   public ResponseEntity getApplicationsIdName() {
     try {
-      List<IdNameDto> list = applicationService.getAllIdName();
+      List<IdNameDto> list = applicationService.findAllIdName();
 
       return ResponseEntity.ok().body(list);
 
@@ -90,7 +90,7 @@ public class ApplicationController {
   @GetMapping(value = MAP_APPLICATION_DETAIL, produces = MAP_APPLICATION_JSON)
   public ResponseEntity getApplicationById(@PathVariable Integer id) {
     try {
-      ApplicationDto applicationDto = applicationService.getOne(id);
+      ApplicationDto applicationDto = applicationService.findById(id);
 
       return ResponseEntity.ok().body(applicationDto);
 

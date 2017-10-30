@@ -12,14 +12,14 @@ import java.util.List;
 
 public interface ApplicationService {
 
-  List<ApplicationDto> getAll() throws CustomException;
+  List<ApplicationDto> findAll() throws CustomException;
 
-  List<IdNameDto> getAllIdName() throws CustomException;
+  List<IdNameDto> findAllIdName() throws CustomException;
 
   Integer saveOrUpdate(ApplicationDto applicationDto) throws CustomException;
 
-  ApplicationDto getOne(Integer id) throws CustomException;
+  ApplicationDto findById(Integer id) throws CustomException;
 
-  void delete(Integer id) throws CustomException;
+  Boolean delete(Integer id) throws CustomException;
 
 }

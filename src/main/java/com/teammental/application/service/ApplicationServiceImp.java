@@ -37,7 +37,7 @@ public class ApplicationServiceImp implements ApplicationService {
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public List<ApplicationDto> getAll() throws CustomException {
+  public List<ApplicationDto> findAll() throws CustomException {
     Optional<List<ApplicationDto>> optional = MeMapper.from(applicationRepository.findAll())
         .toOptional(ApplicationDto.class);
 
@@ -54,7 +54,7 @@ public class ApplicationServiceImp implements ApplicationService {
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public List<IdNameDto> getAllIdName() throws CustomException {
+  public List<IdNameDto> findAllIdName() throws CustomException {
     Optional<List<IdNameDto>> optional = MeMapper.from(applicationRepository.findAll())
         .toOptional(ApplicationDto.class);
 
@@ -81,11 +81,6 @@ public class ApplicationServiceImp implements ApplicationService {
       throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_name_required);
     }
 
-    if (StringUtils.isEmpty(applicationDto.getDescription())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST,
-          CustomException.application_description_required);
-    }
-
     if (applicationRepository.findByKey(applicationDto.getKey()) != null) {
       throw new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key);
     }
@@ -108,8 +103,8 @@ public class ApplicationServiceImp implements ApplicationService {
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public ApplicationDto getOne(Integer id) throws CustomException {
-    Optional<ApplicationDto> optional = MeMapper.from(applicationRepository.getOne(id))
+  public ApplicationDto findById(Integer id) throws CustomException {
+    Optional<ApplicationDto> optional = MeMapper.from(applicationRepository.findOne(id))
         .toOptional(ApplicationDto.class);
 
     if (optional.isPresent()) {
@@ -119,14 +114,16 @@ public class ApplicationServiceImp implements ApplicationService {
     throw new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found);
   }
 
+
   /**
    * Uygulama tablosundan bilgi siler.
    * @param id silinecek uygulamaya ait id bilgisi.
+   * @return Boolean tipinde uygulama silinme durumu döner.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public void delete(Integer id) throws CustomException {
-    Application application = applicationRepository.getOne(id);
+  public Boolean delete(Integer id) throws CustomException {
+    Application application = applicationRepository.findOne(id);
 
     if (application == null) {
       throw new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found);
@@ -137,6 +134,7 @@ public class ApplicationServiceImp implements ApplicationService {
     }
 
     applicationRepository.delete(application);
+    return true;
   }
 
 }
