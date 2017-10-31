@@ -175,14 +175,14 @@ public class ApplicationControllerTest {
   @Test
   public void createApplication_badRequest() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_key_required));
+        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
 
     mockMvc.perform(post(ApplicationController.MAP_APPLICATION)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-        .andExpect(content().string(CustomException.application_key_required));
+        .andExpect(content().string(CustomException.application_required));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -297,14 +297,14 @@ public class ApplicationControllerTest {
   @Test
   public void updateApplication_badRequest() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_key_required));
+        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
 
     mockMvc.perform(put(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-        .andExpect(content().string(CustomException.application_key_required));
+        .andExpect(content().string(CustomException.application_required));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
