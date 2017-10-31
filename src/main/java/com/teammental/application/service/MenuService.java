@@ -11,14 +11,14 @@ import java.util.List;
 
 public interface MenuService {
 
-  List<MenuDto> getAll() throws CustomException;
+  List<MenuDto> findAll() throws CustomException;
 
-  List<MenuDto> getByApplicationId(Integer applicationId) throws CustomException;
+  List<MenuDto> findByApplicationId(Integer applicationId) throws CustomException;
 
   Integer saveOrUpdate(MenuDto menuDto) throws CustomException;
 
-  MenuDto getOne(Integer id) throws CustomException;
+  MenuDto findById(Integer id) throws CustomException;
 
-  void delete(Integer id) throws CustomException;
+  Boolean delete(Integer id) throws CustomException;
 
 }

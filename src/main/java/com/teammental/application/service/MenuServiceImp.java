@@ -32,7 +32,7 @@ public class MenuServiceImp implements MenuService {
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public List<MenuDto> getAll() throws CustomException {
+  public List<MenuDto> findAll() throws CustomException {
     Optional<List<MenuDto>> optional = MeMapper.from(menuRepository.findAll())
         .toOptional(MenuDto.class);
 
@@ -50,7 +50,7 @@ public class MenuServiceImp implements MenuService {
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public List<MenuDto> getByApplicationId(Integer applicationId) throws CustomException {
+  public List<MenuDto> findByApplicationId(Integer applicationId) throws CustomException {
     Optional<List<MenuDto>> optional = MeMapper
         .from(menuRepository.findByApplicationId(applicationId))
         .toOptional(MenuDto.class);
@@ -86,10 +86,6 @@ public class MenuServiceImp implements MenuService {
       throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_order_required);
     }
 
-    if (StringUtils.isEmpty(menuDto.getDescription())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_description_required);
-    }
-
     if (menuRepository.findByRelativeUrl(menuDto.getRelativeUrl()) != null) {
       throw new CustomException(HttpStatus.CONFLICT, CustomException.menu_same_url);
     }
@@ -112,8 +108,8 @@ public class MenuServiceImp implements MenuService {
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public MenuDto getOne(Integer id) throws CustomException {
-    Optional<MenuDto> optional = MeMapper.from(menuRepository.getOne(id))
+  public MenuDto findById(Integer id) throws CustomException {
+    Optional<MenuDto> optional = MeMapper.from(menuRepository.findOne(id))
         .toOptional(MenuDto.class);
 
     if (optional.isPresent()) {
@@ -126,17 +122,19 @@ public class MenuServiceImp implements MenuService {
   /**
    * İşlem tablosundan bilgi siler.
    * @param id silinecek işleme ait id bilgisi.
+   * @return Boolean tipinde işlem silinme durumu döner.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
   @Override
-  public void delete(Integer id) throws CustomException {
-    Menu menu = menuRepository.getOne(id);
+  public Boolean delete(Integer id) throws CustomException {
+    Menu menu = menuRepository.findOne(id);
 
     if (menu == null) {
       throw new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found);
     }
 
     menuRepository.delete(menu);
+    return true;
   }
 
 }

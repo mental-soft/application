@@ -25,40 +25,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MenuController {
 
-  private static final String MAP_MENU = "/operations";
+  public static final String MAP_MENU = "/operations";
+  public static final String MAP_MENU_APP = "/operations?applicationId={applicationId}";
+  public static final String MAP_MENU_DETAIL = "/operations/{id}";
   private static final String MAP_MENU_JSON = "application/json";
-  private static final String MAP_MENU_APP = "/operations?applicationId={applcationId}";
-  private static final String MAP_MENU_DETAIL = "/operations/{id}";
 
   @Autowired
   private MenuService menuService;
 
   /**
-   * Bütün işlemleri görüntüler.
-   * @return Hatayı veya sonucu json olarak döndürür
+   * Bütün ya da uygulamaya göre işlemleri görüntüler.
+   * @param applicationId işlemleri uygulamasına göre kısıtlar.
+   * @return Hatayı veya sonucu json olarak döndürür.
    */
   @GetMapping(value = MAP_MENU, produces = MAP_MENU_JSON)
-  public ResponseEntity getMenus() {
+  public ResponseEntity getMenus(@RequestParam(required = false) Integer applicationId) {
     try {
-      List<MenuDto> list = menuService.getAll();
+      if (applicationId == null) {
+        List<MenuDto> list = menuService.findAll();
+        return ResponseEntity.ok().body(list);
+      }
 
-      return ResponseEntity.ok().body(list);
-
-    } catch (CustomException e) {
-      return ResponseEntity.status(e.getCode()).body(e.getLabel());
-    }
-  }
-
-  /**
-   * Bir uygulamaya ait bütün işlemleri görüntüler.
-   * @param applicationId işlemlere ait uygulama id bilgisi.
-   * @return Hatayı veya sonucu json olarak döndürür
-   */
-  @GetMapping(value = MAP_MENU_APP, produces = MAP_MENU_JSON)
-  public ResponseEntity getMenusByApplicationId(@RequestParam Integer applicationId) {
-    try {
-      List<MenuDto> list = menuService.getByApplicationId(applicationId);
-
+      List<MenuDto> list = menuService.findByApplicationId(applicationId);
       return ResponseEntity.ok().body(list);
 
     } catch (CustomException e) {
@@ -69,7 +57,7 @@ public class MenuController {
   /**
    * Bir işlem ekler.
    * @param menuDto eklenecek işlemdir.
-   * @return Hatayı veya sonucu json olarak döndürür
+   * @return Hatayı veya sonucu json olarak döndürür.
    */
   @PostMapping(value = MAP_MENU, produces = MAP_MENU_JSON)
   public ResponseEntity createMenu(@RequestBody MenuDto menuDto) {
@@ -86,12 +74,12 @@ public class MenuController {
   /**
    * Id parametresine göre işlemi görüntüler.
    * @param id görüntülenmek istenen işlem id bilgisi.
-   * @return Hatayı veya sonucu json olarak döndürür
+   * @return Hatayı veya sonucu json olarak döndürür.
    */
   @GetMapping(value = MAP_MENU_DETAIL, produces = MAP_MENU_JSON)
   public ResponseEntity getMenuById(@PathVariable Integer id) {
     try {
-      MenuDto menuDto = menuService.getOne(id);
+      MenuDto menuDto = menuService.findById(id);
 
       return ResponseEntity.ok().body(menuDto);
 
@@ -103,7 +91,7 @@ public class MenuController {
   /**
    * Bir işlemi günceller.
    * @param menuDto güncellenecek işlemdir.
-   * @return Hatayı veya sonucu json olarak döndürür
+   * @return Hatayı veya sonucu json olarak döndürür.
    */
   @PutMapping(value = MAP_MENU_DETAIL, produces = MAP_MENU_JSON)
   public ResponseEntity updateMenu(@RequestBody MenuDto menuDto) {
@@ -120,7 +108,7 @@ public class MenuController {
   /**
    * Bir işlemi siler.
    * @param id silinecek işleme ait id bilgisi.
-   * @return Hatayı veya sonucu json olarak döndürür
+   * @return Hatayı veya sonucu json olarak döndürür.
    */
   @DeleteMapping(value = MAP_MENU_DETAIL, produces = MAP_MENU_JSON)
   public ResponseEntity deleteMenu(@PathVariable Integer id) {
