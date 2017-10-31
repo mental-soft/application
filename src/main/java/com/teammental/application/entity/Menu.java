@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -13,29 +15,34 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "menu")
+@Table(name = "menu",
+    uniqueConstraints = @UniqueConstraint(columnNames = "relative_url"))
 public class Menu {
 
   @Id
-  @Column(name = "id", columnDefinition = "serial", unique = true, nullable = false)
+  @Column(name = "id", columnDefinition = "serial")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   @Column(name = "parent_id", columnDefinition = "integer")
   private Integer parentId;
 
-  @Column(name = "application_id", columnDefinition = "integer", nullable = false)
+  @NotNull
+  @Column(name = "application_id", columnDefinition = "integer")
   private Integer applicationId;
 
+  @NotNull
   @Size(max = 250)
-  @Column(name = "relative_url", columnDefinition = "varchar", unique = true, nullable = false)
+  @Column(name = "relative_url", columnDefinition = "varchar")
   private String relativeUrl;
 
+  @NotNull
   @Size(max = 150)
-  @Column(name = "name", columnDefinition = "nvarchar", nullable = false)
+  @Column(name = "name", columnDefinition = "nvarchar")
   private String name;
 
-  @Column(name = "order", columnDefinition = "integer", nullable = false)
+  @NotNull
+  @Column(name = "order", columnDefinition = "integer")
   private Integer order;
 
   @Size(max = 300)

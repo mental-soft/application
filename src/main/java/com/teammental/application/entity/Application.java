@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -13,20 +15,23 @@ import javax.validation.constraints.Size;
  */
 
 @Entity
-@Table(name = "application")
+@Table(name = "application",
+    uniqueConstraints = @UniqueConstraint(columnNames = "key"))
 public class Application {
 
   @Id
-  @Column(name = "id", columnDefinition = "serial", unique = true, nullable = false)
+  @Column(name = "id", columnDefinition = "serial")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @NotNull
   @Size(max = 100)
-  @Column(name = "key", columnDefinition = "varchar", unique = true, nullable = false)
+  @Column(name = "key", columnDefinition = "varchar")
   private String key;
 
+  @NotNull
   @Size(max = 150)
-  @Column(name = "name", columnDefinition = "nvarchar", nullable = false)
+  @Column(name = "name", columnDefinition = "nvarchar")
   private String name;
 
   @Size(max = 300)
