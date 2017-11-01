@@ -13,8 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teammental.application.config.Map;
+import com.teammental.application.config.Strings;
+import com.teammental.application.config.TestUtility;
 import com.teammental.application.dto.ApplicationDto;
 import com.teammental.application.dto.IdNameDto;
 import com.teammental.application.exception.CustomException;
@@ -40,6 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = ApplicationController.class, secure = false)
 public class ApplicationControllerTest {
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -52,26 +54,28 @@ public class ApplicationControllerTest {
 
   /**
    * Test işlemleri için kullanılacak veriler oluşturulur.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Before
   public void init() throws Exception {
     list = new ArrayList<>();
-    list.add(getApplicationDto(1, "KEY1", "NAME1", "DESCRIPTION1"));
-    list.add(getApplicationDto(2, "KEY2", "NAME2", "DESCRIPTION2"));
-    list.add(getApplicationDto(3, "KEY3", "NAME3", "DESCRIPTION3"));
+    list.add(getApplicationDto(1));
+    list.add(getApplicationDto(2));
+    list.add(getApplicationDto(3));
 
     listIdName = new ArrayList<>();
-    listIdName.add(getIdNameDto(1, "NAME1"));
-    listIdName.add(getIdNameDto(2, "NAME2"));
-    listIdName.add(getIdNameDto(3, "NAME3"));
+    listIdName.add(getIdNameDto(1));
+    listIdName.add(getIdNameDto(2));
+    listIdName.add(getIdNameDto(3));
 
-    applicationDto = getApplicationDto(5, "KEY5", "NAME5", "DESCRIPTION5");
+    applicationDto = getApplicationDto(4);
   }
 
   /**
    * HTTP Status = 200 - OK.
    * Bütün uygulamarın görüntülenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
@@ -82,7 +86,7 @@ public class ApplicationControllerTest {
     mockMvc.perform(get(Map.APPLICATION))
         .andExpect(status().isOk())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().json(objectToJson(list)));
+        .andExpect(content().json(TestUtility.objectToJson(list)));
 
     verify(applicationService, times(1)).findAll();
     verifyNoMoreInteractions(applicationService);
@@ -91,17 +95,18 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 404 - NOT FOUND.
    * Bütün uygulamarın görüntülenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void getApplications_notFound() throws Exception {
     when(applicationService.findAll())
-        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
+        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found));
 
     mockMvc.perform(get(Map.APPLICATION))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_not_found));
+        .andExpect(content().string(Strings.application_not_found));
 
     verify(applicationService, times(1)).findAll();
     verifyNoMoreInteractions(applicationService);
@@ -110,6 +115,7 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 200 - OK.
    * Bütün uygulamarın id, name şeklinde görüntülenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
@@ -120,7 +126,7 @@ public class ApplicationControllerTest {
     mockMvc.perform(get(Map.APPLICATION_IDNAME))
         .andExpect(status().isOk())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().json(objectToJson(listIdName)));
+        .andExpect(content().json(TestUtility.objectToJson(listIdName)));
 
     verify(applicationService, times(1)).findAllIdName();
     verifyNoMoreInteractions(applicationService);
@@ -129,17 +135,18 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 404 - NOT FOUND.
    * Bütün uygulamarın id, name şeklinde görüntülenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void getApplicationsIdName_notFound() throws Exception {
     when(applicationService.findAllIdName())
-        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
+        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found));
 
     mockMvc.perform(get(Map.APPLICATION_IDNAME))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_not_found));
+        .andExpect(content().string(Strings.application_not_found));
 
     verify(applicationService, times(1)).findAllIdName();
     verifyNoMoreInteractions(applicationService);
@@ -148,6 +155,7 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 201 - CREATED.
    * Yeni bir uygulama eklenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
@@ -157,10 +165,10 @@ public class ApplicationControllerTest {
 
     mockMvc.perform(post(Map.APPLICATION)
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isCreated())
-        .andExpect(content().string(""))
-        .andExpect(header().string("Location", Map.APPLICATION_URI + applicationDto.getId()));
+        .andExpect(content().string(Strings.empty))
+        .andExpect(header().string(Strings.location, Map.APPLICATION_URI + applicationDto.getId()));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -169,19 +177,20 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 400 - BAD REQUEST.
    * Yeni bir uygulama eklenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void createApplication_badRequest() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
+        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, Strings.key_required));
 
     mockMvc.perform(post(Map.APPLICATION)
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_required));
+        .andExpect(content().string(Strings.key_required));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -190,19 +199,20 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 409 - CONFLICT.
    * Yeni bir uygulama eklenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void createApplication_conflict() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key));
+        .thenThrow(new CustomException(HttpStatus.CONFLICT, Strings.application_same_key));
 
     mockMvc.perform(post(Map.APPLICATION)
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isConflict())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_same_key));
+        .andExpect(content().string(Strings.application_same_key));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -211,19 +221,20 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 500 - INTERNAL SERVER ERROR.
    * Yeni bir uygulama eklenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void createApplication_internalServerError() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.application_save_error));
+        .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, Strings.save_error));
 
     mockMvc.perform(post(Map.APPLICATION)
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isInternalServerError())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_save_error));
+        .andExpect(content().string(Strings.save_error));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -232,6 +243,7 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 200 - OK.
    * Tek uygulama görüntülenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
@@ -243,7 +255,7 @@ public class ApplicationControllerTest {
         .contentType(Map.JSON_UTF8))
         .andExpect(status().isOk())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().json(objectToJson(applicationDto)));
+        .andExpect(content().json(TestUtility.objectToJson(applicationDto)));
 
     verify(applicationService, times(1)).findById(applicationDto.getId());
     verifyNoMoreInteractions(applicationService);
@@ -252,18 +264,19 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 404 - NOT FOUND.
    * Tek uygulama görüntülenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void getApplicationById_notFound() throws Exception {
     when(applicationService.findById(applicationDto.getId()))
-        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
+        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found));
 
     mockMvc.perform(get(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_not_found));
+        .andExpect(content().string(Strings.application_not_found));
 
     verify(applicationService, times(1)).findById(applicationDto.getId());
     verifyNoMoreInteractions(applicationService);
@@ -272,6 +285,7 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 200 - OK.
    * Bir uygulamanın güncellenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
@@ -284,10 +298,10 @@ public class ApplicationControllerTest {
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isOk())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().json(objectToJson(applicationDto)));
+        .andExpect(content().json(TestUtility.objectToJson(applicationDto)));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verify(applicationService, times(1)).findById(applicationDto.getId());
@@ -297,19 +311,20 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 400 - BAD REQUEST.
    * Bir uygulamanın güncellenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void updateApplication_badRequest() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
+        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, Strings.key_required));
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_required));
+        .andExpect(content().string(Strings.key_required));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -318,19 +333,20 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 409 - CONFLICT.
    * Bir uygulamanın güncellenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void updateApplication_conflict() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key));
+        .thenThrow(new CustomException(HttpStatus.CONFLICT, Strings.application_same_key));
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isConflict())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_same_key));
+        .andExpect(content().string(Strings.application_same_key));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -339,19 +355,20 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 500 - INTERNAL SERVER ERROR.
    * Bir uygulamanın güncellenmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void updateApplication_internalServerError() throws Exception {
     when(applicationService.saveOrUpdate(anyObject()))
-        .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.application_save_error));
+        .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, Strings.save_error));
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8)
-        .content(objectToJson(applicationDto)))
+        .content(TestUtility.objectToJson(applicationDto)))
         .andExpect(status().isInternalServerError())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_save_error));
+        .andExpect(content().string(Strings.save_error));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -360,6 +377,7 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 204 - NO CONTENT.
    * Bir uygulamanın silinmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
@@ -378,18 +396,19 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 404 - NOT FOUND.
    * Bir uygulamanın silinmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void deleteApplication_notFound() throws Exception {
     when(applicationService.delete(applicationDto.getId()))
-        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
+        .thenThrow(new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found));
 
     mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_not_found));
+        .andExpect(content().string(Strings.application_not_found));
 
     verify(applicationService, times(1)).delete(applicationDto.getId());
     verifyNoMoreInteractions(applicationService);
@@ -398,18 +417,19 @@ public class ApplicationControllerTest {
   /**
    * HTTP Status = 400 - BAD REQUEST.
    * Bir uygulamanın silinmesi test ediliyor.
+   *
    * @throws Exception Oluşabilecek hata ve mesajları döndürür.
    */
   @Test
   public void deleteApplication_badRequest() throws Exception {
     when(applicationService.delete(applicationDto.getId()))
-        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_has_menu));
+        .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, Strings.application_has_menu));
 
     mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(Map.JSON_UTF8))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(Map.JSON_UTF8))
-        .andExpect(content().string(CustomException.application_has_menu));
+        .andExpect(content().string(Strings.application_has_menu));
 
     verify(applicationService, times(1)).delete(applicationDto.getId());
     verifyNoMoreInteractions(applicationService);
@@ -417,43 +437,30 @@ public class ApplicationControllerTest {
 
   /**
    * ApplicationDto oluşturur.
-   * @param id Application id.
-   * @param key Application key.
-   * @param name Application name.
-   * @param description Application description.
+   *
+   * @param id Uygulama id bilgisi.
    * @return applicationDto.
    */
-  private ApplicationDto getApplicationDto(Integer id, String key, String name, String description) {
+  private ApplicationDto getApplicationDto(Integer id) {
     ApplicationDto applicationDto = new ApplicationDto();
     applicationDto.setId(id);
-    applicationDto.setKey(key);
-    applicationDto.setName(name);
-    applicationDto.setDescription(description);
+    applicationDto.setKey("Key" + id);
+    applicationDto.setName("Name" + id);
+    applicationDto.setDescription("Description" + id);
     return applicationDto;
   }
 
   /**
    * IdNameDto oluşturur.
-   * @param id Application id.
-   * @param name Application name.
+   *
+   * @param id Uygulama id bilgisi.
    * @return idnameDto.
    */
-  private IdNameDto getIdNameDto(Integer id, String name) {
+  private IdNameDto getIdNameDto(Integer id) {
     IdNameDto idNameDto = new IdNameDto();
     idNameDto.setId(id);
-    idNameDto.setName(name);
+    idNameDto.setName("Name" + id);
     return idNameDto;
-  }
-
-  /**
-   * Nesneleri json'a dönüştürür.
-   * @param object dönüştürülecek nesne.
-   * @return nesnenin json sonucu.
-   * @throws Exception Oluşabilecek hata ve mesajları döndürür.
-   */
-  private String objectToJson(Object object) throws Exception {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.writeValueAsString(object);
   }
 
 }

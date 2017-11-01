@@ -1,5 +1,6 @@
 package com.teammental.application.service;
 
+import com.teammental.application.config.Strings;
 import com.teammental.application.dto.MenuDto;
 import com.teammental.application.entity.Menu;
 import com.teammental.application.exception.CustomException;
@@ -28,6 +29,7 @@ public class MenuServiceImp implements MenuService {
 
   /**
    * Bütün işlem bilgilerine ulaşır.
+   *
    * @return MenuDto tipinde liste döner.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
    */
@@ -40,11 +42,12 @@ public class MenuServiceImp implements MenuService {
       return optional.get();
     }
 
-    throw new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found);
+    throw new CustomException(HttpStatus.NOT_FOUND, Strings.menu_not_found);
   }
 
   /**
    * applicationId parametresine göre işlem bilgisine ulaşır.
+   *
    * @param applicationId uygulamaya ait id bilgisi.
    * @return MenuDto tipinde işlem bilgisi döner.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
@@ -59,11 +62,12 @@ public class MenuServiceImp implements MenuService {
       return optional.get();
     }
 
-    throw new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found);
+    throw new CustomException(HttpStatus.NOT_FOUND, Strings.menu_not_found);
   }
 
   /**
    * İşlem tablosune bilgi kayıt eder.
+   *
    * @param menuDto kayıt edilecek işlemdir.
    * @return Kayıt edilecek işlem id bilgisi.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
@@ -71,23 +75,23 @@ public class MenuServiceImp implements MenuService {
   @Override
   public Integer saveOrUpdate(MenuDto menuDto) throws CustomException {
     if (StringUtils.isEmpty(menuDto.getApplicationId())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_app_required);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.menu_app_required);
     }
 
     if (StringUtils.isEmpty(menuDto.getRelativeUrl())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_url_required);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.menu_url_required);
     }
 
     if (StringUtils.isEmpty(menuDto.getName())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_name_required);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.menu_name_required);
     }
 
     if (StringUtils.isEmpty(menuDto.getOrder())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_order_required);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.menu_order_required);
     }
 
     if (menuRepository.findByRelativeUrl(menuDto.getRelativeUrl()) != null) {
-      throw new CustomException(HttpStatus.CONFLICT, CustomException.menu_same_url);
+      throw new CustomException(HttpStatus.CONFLICT, Strings.menu_same_url);
     }
 
     Optional<Menu> optional = MeMapper.from(menuDto)
@@ -98,11 +102,12 @@ public class MenuServiceImp implements MenuService {
       return menu.getId();
     }
 
-    throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.menu_save_error);
+    throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, Strings.save_error);
   }
 
   /**
    * Id parametresine göre işlem bilgisine ulaşır.
+   *
    * @param id istenilen işlemin id bilgisi.
    * @return MenuDto tipinde işlem bilgisi döner.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
@@ -116,11 +121,12 @@ public class MenuServiceImp implements MenuService {
       return optional.get();
     }
 
-    throw new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found);
+    throw new CustomException(HttpStatus.NOT_FOUND, Strings.menu_not_found);
   }
 
   /**
    * İşlem tablosundan bilgi siler.
+   *
    * @param id silinecek işleme ait id bilgisi.
    * @return Boolean tipinde işlem silinme durumu döner.
    * @throws CustomException Oluşabilecek hata ve mesajları oluşturur.
@@ -130,7 +136,7 @@ public class MenuServiceImp implements MenuService {
     Menu menu = menuRepository.findOne(id);
 
     if (menu == null) {
-      throw new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found);
+      throw new CustomException(HttpStatus.NOT_FOUND, Strings.menu_not_found);
     }
 
     menuRepository.delete(menu);

@@ -1,5 +1,9 @@
 package com.teammental.application.config;
 
+/**
+ * Mapping string'lerinin bulunduğu sınıf.
+ */
+
 public class Map {
 
   public static final String JSON = "application/json";

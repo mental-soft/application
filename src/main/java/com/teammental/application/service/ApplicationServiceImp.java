@@ -1,5 +1,6 @@
 package com.teammental.application.service;
 
+import com.teammental.application.config.Strings;
 import com.teammental.application.dto.ApplicationDto;
 import com.teammental.application.dto.IdNameDto;
 import com.teammental.application.entity.Application;
@@ -45,7 +46,7 @@ public class ApplicationServiceImp implements ApplicationService {
       return optional.get();
     }
 
-    throw new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found);
+    throw new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found);
   }
 
   /**
@@ -62,7 +63,7 @@ public class ApplicationServiceImp implements ApplicationService {
       return optional.get();
     }
 
-    throw new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found);
+    throw new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found);
   }
 
   /**
@@ -74,15 +75,15 @@ public class ApplicationServiceImp implements ApplicationService {
   @Override
   public Integer saveOrUpdate(ApplicationDto applicationDto) throws CustomException {
     if (StringUtils.isEmpty(applicationDto.getKey())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_key_required);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.application_key_required);
     }
 
     if (StringUtils.isEmpty(applicationDto.getName())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_name_required);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.application_name_required);
     }
 
     if (applicationRepository.findByKey(applicationDto.getKey()) != null) {
-      throw new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key);
+      throw new CustomException(HttpStatus.CONFLICT, Strings.application_same_key);
     }
 
     Optional<Application> optional = MeMapper.from(applicationDto)
@@ -92,8 +93,7 @@ public class ApplicationServiceImp implements ApplicationService {
       return applicationRepository.save(optional.get()).getId();
     }
 
-    throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR,
-        CustomException.application_save_error);
+    throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, Strings.save_error);
   }
 
   /**
@@ -111,7 +111,7 @@ public class ApplicationServiceImp implements ApplicationService {
       return optional.get();
     }
 
-    throw new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found);
+    throw new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found);
   }
 
 
@@ -126,11 +126,11 @@ public class ApplicationServiceImp implements ApplicationService {
     Application application = applicationRepository.findOne(id);
 
     if (application == null) {
-      throw new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found);
+      throw new CustomException(HttpStatus.NOT_FOUND, Strings.application_not_found);
     }
 
     if (menuRepository.findByApplicationId(id).size() > 0) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_has_menu);
+      throw new CustomException(HttpStatus.BAD_REQUEST, Strings.application_has_menu);
     }
 
     applicationRepository.delete(application);
