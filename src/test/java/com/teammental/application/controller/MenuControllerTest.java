@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teammental.application.config.Map;
 import com.teammental.application.dto.MenuDto;
 import com.teammental.application.exception.CustomException;
 import com.teammental.application.service.MenuService;
@@ -76,7 +77,7 @@ public class MenuControllerTest {
     when(menuService.findAll())
         .thenReturn(list);
 
-    mockMvc.perform(get(MenuController.MAP_MENU))
+    mockMvc.perform(get(Map.MENU))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().json(objectToJson(list)));
@@ -95,7 +96,7 @@ public class MenuControllerTest {
     when(menuService.findAll())
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
-    mockMvc.perform(get(MenuController.MAP_MENU))
+    mockMvc.perform(get(Map.MENU))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
@@ -114,7 +115,8 @@ public class MenuControllerTest {
     when(menuService.findByApplicationId(menuDto.getApplicationId()))
         .thenReturn(listByApplicationId);
 
-    mockMvc.perform(get(MenuController.MAP_MENU_APP, menuDto.getApplicationId()))
+    mockMvc.perform(get(Map.MENU_APP, menuDto.getApplicationId())
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().json(objectToJson(listByApplicationId)));
@@ -133,7 +135,8 @@ public class MenuControllerTest {
     when(menuService.findByApplicationId(menuDto.getApplicationId()))
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
-    mockMvc.perform(get(MenuController.MAP_MENU_APP, menuDto.getApplicationId()))
+    mockMvc.perform(get(Map.MENU_APP, menuDto.getApplicationId())
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
@@ -152,13 +155,12 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenReturn(menuDto.getId());
 
-    mockMvc.perform(post(MenuController.MAP_MENU)
+    mockMvc.perform(post(Map.MENU)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isCreated())
         .andExpect(content().string(""))
-        .andExpect(header().string("Location",
-            MenuController.MAP_MENU + "/" + menuDto.getId()));
+        .andExpect(header().string("Location", Map.MENU_URI + menuDto.getId()));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(menuService);
@@ -174,7 +176,7 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_required));
 
-    mockMvc.perform(post(MenuController.MAP_MENU)
+    mockMvc.perform(post(Map.MENU)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isBadRequest())
@@ -195,7 +197,7 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.menu_same_url));
 
-    mockMvc.perform(post(MenuController.MAP_MENU)
+    mockMvc.perform(post(Map.MENU)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isConflict())
@@ -216,7 +218,7 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.menu_save_error));
 
-    mockMvc.perform(post(MenuController.MAP_MENU)
+    mockMvc.perform(post(Map.MENU)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isInternalServerError())
@@ -237,7 +239,8 @@ public class MenuControllerTest {
     when(menuService.findById(menuDto.getId()))
         .thenReturn(menuDto);
 
-    mockMvc.perform(get(MenuController.MAP_MENU_DETAIL, menuDto.getId()))
+    mockMvc.perform(get(Map.MENU_DETAIL, menuDto.getId())
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().json(objectToJson(menuDto)));
@@ -256,7 +259,8 @@ public class MenuControllerTest {
     when(menuService.findById(menuDto.getId()))
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
-    mockMvc.perform(get(MenuController.MAP_MENU_DETAIL, menuDto.getId()))
+    mockMvc.perform(get(Map.MENU_DETAIL, menuDto.getId())
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
@@ -275,7 +279,10 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenReturn(menuDto.getId());
 
-    mockMvc.perform(put(MenuController.MAP_MENU_DETAIL, menuDto.getId())
+    when(menuService.findById(menuDto.getId()))
+        .thenReturn(menuDto);
+
+    mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isOk())
@@ -283,6 +290,7 @@ public class MenuControllerTest {
         .andExpect(content().json(objectToJson(menuDto)));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
+    verify(menuService, times(1)).findById(menuDto.getId());
     verifyNoMoreInteractions(menuService);
   }
 
@@ -296,7 +304,7 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_required));
 
-    mockMvc.perform(put(MenuController.MAP_MENU_DETAIL, menuDto.getId())
+    mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isBadRequest())
@@ -317,7 +325,7 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.menu_same_url));
 
-    mockMvc.perform(put(MenuController.MAP_MENU_DETAIL, menuDto.getId())
+    mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isConflict())
@@ -338,7 +346,7 @@ public class MenuControllerTest {
     when(menuService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.menu_save_error));
 
-    mockMvc.perform(put(MenuController.MAP_MENU_DETAIL, menuDto.getId())
+    mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isInternalServerError())
@@ -359,7 +367,7 @@ public class MenuControllerTest {
     when(menuService.delete(menuDto.getId()))
         .thenReturn(true);
 
-    mockMvc.perform(delete(MenuController.MAP_MENU_DETAIL, menuDto.getId())
+    mockMvc.perform(delete(Map.MENU_DETAIL, menuDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNoContent());
 
@@ -377,7 +385,7 @@ public class MenuControllerTest {
     when(menuService.delete(menuDto.getId()))
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
-    mockMvc.perform(delete(MenuController.MAP_MENU_DETAIL, menuDto.getId())
+    mockMvc.perform(delete(Map.MENU_DETAIL, menuDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))

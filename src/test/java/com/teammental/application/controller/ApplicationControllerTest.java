@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teammental.application.config.Map;
 import com.teammental.application.dto.ApplicationDto;
 import com.teammental.application.dto.IdNameDto;
 import com.teammental.application.exception.CustomException;
@@ -79,7 +80,7 @@ public class ApplicationControllerTest {
     when(applicationService.findAll())
         .thenReturn(list);
 
-    mockMvc.perform(get(ApplicationController.MAP_APPLICATION))
+    mockMvc.perform(get(Map.APPLICATION))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().json(objectToJson(list)));
@@ -98,7 +99,7 @@ public class ApplicationControllerTest {
     when(applicationService.findAll())
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
 
-    mockMvc.perform(get(ApplicationController.MAP_APPLICATION))
+    mockMvc.perform(get(Map.APPLICATION))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
@@ -117,7 +118,7 @@ public class ApplicationControllerTest {
     when(applicationService.findAllIdName())
         .thenReturn(listIdName);
 
-    mockMvc.perform(get(ApplicationController.MAP_APPLICATION_IDNAME))
+    mockMvc.perform(get(Map.APPLICATION_IDNAME))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().json(objectToJson(listIdName)));
@@ -136,7 +137,7 @@ public class ApplicationControllerTest {
     when(applicationService.findAllIdName())
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
 
-    mockMvc.perform(get(ApplicationController.MAP_APPLICATION_IDNAME))
+    mockMvc.perform(get(Map.APPLICATION_IDNAME))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
@@ -155,13 +156,12 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenReturn(applicationDto.getId());
 
-    mockMvc.perform(post(ApplicationController.MAP_APPLICATION)
+    mockMvc.perform(post(Map.APPLICATION)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isCreated())
         .andExpect(content().string(""))
-        .andExpect(header().string("Location",
-            ApplicationController.MAP_APPLICATION + "/" + applicationDto.getId()));
+        .andExpect(header().string("Location", Map.APPLICATION_URI + applicationDto.getId()));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
     verifyNoMoreInteractions(applicationService);
@@ -177,7 +177,7 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
 
-    mockMvc.perform(post(ApplicationController.MAP_APPLICATION)
+    mockMvc.perform(post(Map.APPLICATION)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
@@ -198,7 +198,7 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key));
 
-    mockMvc.perform(post(ApplicationController.MAP_APPLICATION)
+    mockMvc.perform(post(Map.APPLICATION)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isConflict())
@@ -219,7 +219,7 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.application_save_error));
 
-    mockMvc.perform(post(ApplicationController.MAP_APPLICATION)
+    mockMvc.perform(post(Map.APPLICATION)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isInternalServerError())
@@ -240,7 +240,8 @@ public class ApplicationControllerTest {
     when(applicationService.findById(applicationDto.getId()))
         .thenReturn(applicationDto);
 
-    mockMvc.perform(get(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId()))
+    mockMvc.perform(get(Map.APPLICATION_DETAIL, applicationDto.getId())
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().json(objectToJson(applicationDto)));
@@ -259,7 +260,8 @@ public class ApplicationControllerTest {
     when(applicationService.findById(applicationDto.getId()))
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
 
-    mockMvc.perform(get(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId()))
+    mockMvc.perform(get(Map.APPLICATION_DETAIL, applicationDto.getId())
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
@@ -278,7 +280,10 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenReturn(applicationDto.getId());
 
-    mockMvc.perform(put(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    when(applicationService.findById(applicationDto.getId()))
+        .thenReturn(applicationDto);
+
+    mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isOk())
@@ -286,6 +291,7 @@ public class ApplicationControllerTest {
         .andExpect(content().json(objectToJson(applicationDto)));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
+    verify(applicationService, times(1)).findById(applicationDto.getId());
     verifyNoMoreInteractions(applicationService);
   }
 
@@ -299,7 +305,7 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
 
-    mockMvc.perform(put(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
@@ -320,7 +326,7 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key));
 
-    mockMvc.perform(put(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isConflict())
@@ -341,7 +347,7 @@ public class ApplicationControllerTest {
     when(applicationService.saveOrUpdate(anyObject()))
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.application_save_error));
 
-    mockMvc.perform(put(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isInternalServerError())
@@ -362,7 +368,7 @@ public class ApplicationControllerTest {
     when(applicationService.delete(applicationDto.getId()))
         .thenReturn(true);
 
-    mockMvc.perform(delete(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNoContent());
 
@@ -380,7 +386,7 @@ public class ApplicationControllerTest {
     when(applicationService.delete(applicationDto.getId()))
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
 
-    mockMvc.perform(delete(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isNotFound())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -400,7 +406,7 @@ public class ApplicationControllerTest {
     when(applicationService.delete(applicationDto.getId()))
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_has_menu));
 
-    mockMvc.perform(delete(ApplicationController.MAP_APPLICATION_DETAIL, applicationDto.getId())
+    mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
