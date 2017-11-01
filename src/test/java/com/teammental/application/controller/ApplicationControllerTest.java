@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -82,7 +81,7 @@ public class ApplicationControllerTest {
 
     mockMvc.perform(get(Map.APPLICATION))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(list)));
 
     verify(applicationService, times(1)).findAll();
@@ -101,7 +100,7 @@ public class ApplicationControllerTest {
 
     mockMvc.perform(get(Map.APPLICATION))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
 
     verify(applicationService, times(1)).findAll();
@@ -120,7 +119,7 @@ public class ApplicationControllerTest {
 
     mockMvc.perform(get(Map.APPLICATION_IDNAME))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(listIdName)));
 
     verify(applicationService, times(1)).findAllIdName();
@@ -139,7 +138,7 @@ public class ApplicationControllerTest {
 
     mockMvc.perform(get(Map.APPLICATION_IDNAME))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
 
     verify(applicationService, times(1)).findAllIdName();
@@ -157,7 +156,7 @@ public class ApplicationControllerTest {
         .thenReturn(applicationDto.getId());
 
     mockMvc.perform(post(Map.APPLICATION)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isCreated())
         .andExpect(content().string(""))
@@ -178,10 +177,10 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
 
     mockMvc.perform(post(Map.APPLICATION)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_required));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -199,10 +198,10 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key));
 
     mockMvc.perform(post(Map.APPLICATION)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isConflict())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_same_key));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -220,10 +219,10 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.application_save_error));
 
     mockMvc.perform(post(Map.APPLICATION)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isInternalServerError())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_save_error));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -241,9 +240,9 @@ public class ApplicationControllerTest {
         .thenReturn(applicationDto);
 
     mockMvc.perform(get(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(applicationDto)));
 
     verify(applicationService, times(1)).findById(applicationDto.getId());
@@ -261,9 +260,9 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
 
     mockMvc.perform(get(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
 
     verify(applicationService, times(1)).findById(applicationDto.getId());
@@ -284,10 +283,10 @@ public class ApplicationControllerTest {
         .thenReturn(applicationDto);
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(applicationDto)));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -306,10 +305,10 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_required));
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isBadRequest())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_required));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -327,10 +326,10 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.application_same_key));
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isConflict())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_same_key));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -348,10 +347,10 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.application_save_error));
 
     mockMvc.perform(put(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(applicationDto)))
         .andExpect(status().isInternalServerError())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_save_error));
 
     verify(applicationService, times(1)).saveOrUpdate(anyObject());
@@ -369,7 +368,7 @@ public class ApplicationControllerTest {
         .thenReturn(true);
 
     mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNoContent());
 
     verify(applicationService, times(1)).delete(applicationDto.getId());
@@ -387,9 +386,9 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.application_not_found));
 
     mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_not_found));
 
     verify(applicationService, times(1)).delete(applicationDto.getId());
@@ -407,9 +406,9 @@ public class ApplicationControllerTest {
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.application_has_menu));
 
     mockMvc.perform(delete(Map.APPLICATION_DETAIL, applicationDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isBadRequest())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.application_has_menu));
 
     verify(applicationService, times(1)).delete(applicationDto.getId());

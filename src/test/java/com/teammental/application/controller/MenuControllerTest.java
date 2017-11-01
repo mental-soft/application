@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -79,7 +78,7 @@ public class MenuControllerTest {
 
     mockMvc.perform(get(Map.MENU))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(list)));
 
     verify(menuService, times(1)).findAll();
@@ -98,7 +97,7 @@ public class MenuControllerTest {
 
     mockMvc.perform(get(Map.MENU))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
 
     verify(menuService, times(1)).findAll();
@@ -116,9 +115,9 @@ public class MenuControllerTest {
         .thenReturn(listByApplicationId);
 
     mockMvc.perform(get(Map.MENU_APP, menuDto.getApplicationId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(listByApplicationId)));
 
     verify(menuService, times(1)).findByApplicationId(menuDto.getApplicationId());
@@ -136,9 +135,9 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
     mockMvc.perform(get(Map.MENU_APP, menuDto.getApplicationId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
 
     verify(menuService, times(1)).findByApplicationId(menuDto.getId());
@@ -156,7 +155,7 @@ public class MenuControllerTest {
         .thenReturn(menuDto.getId());
 
     mockMvc.perform(post(Map.MENU)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isCreated())
         .andExpect(content().string(""))
@@ -177,10 +176,10 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_required));
 
     mockMvc.perform(post(Map.MENU)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isBadRequest())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_required));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -198,10 +197,10 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.menu_same_url));
 
     mockMvc.perform(post(Map.MENU)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isConflict())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_same_url));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -219,10 +218,10 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.menu_save_error));
 
     mockMvc.perform(post(Map.MENU)
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isInternalServerError())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_save_error));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -240,9 +239,9 @@ public class MenuControllerTest {
         .thenReturn(menuDto);
 
     mockMvc.perform(get(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(menuDto)));
 
     verify(menuService, times(1)).findById(menuDto.getId());
@@ -260,9 +259,9 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
     mockMvc.perform(get(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
 
     verify(menuService, times(1)).findById(menuDto.getId());
@@ -283,10 +282,10 @@ public class MenuControllerTest {
         .thenReturn(menuDto);
 
     mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().json(objectToJson(menuDto)));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -305,10 +304,10 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.BAD_REQUEST, CustomException.menu_required));
 
     mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isBadRequest())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_required));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -326,10 +325,10 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.CONFLICT, CustomException.menu_same_url));
 
     mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isConflict())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_same_url));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -347,10 +346,10 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.INTERNAL_SERVER_ERROR, CustomException.menu_save_error));
 
     mockMvc.perform(put(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .contentType(Map.JSON_UTF8)
         .content(objectToJson(menuDto)))
         .andExpect(status().isInternalServerError())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_save_error));
 
     verify(menuService, times(1)).saveOrUpdate(anyObject());
@@ -368,7 +367,7 @@ public class MenuControllerTest {
         .thenReturn(true);
 
     mockMvc.perform(delete(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNoContent());
 
     verify(menuService, times(1)).delete(menuDto.getId());
@@ -386,9 +385,9 @@ public class MenuControllerTest {
         .thenThrow(new CustomException(HttpStatus.NOT_FOUND, CustomException.menu_not_found));
 
     mockMvc.perform(delete(Map.MENU_DETAIL, menuDto.getId())
-        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .contentType(Map.JSON_UTF8))
         .andExpect(status().isNotFound())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(content().contentType(Map.JSON_UTF8))
         .andExpect(content().string(CustomException.menu_not_found));
 
     verify(menuService, times(1)).delete(menuDto.getId());
